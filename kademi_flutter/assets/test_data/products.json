@@ -1,0 +1,167 @@
+{
+    "data": {
+        "products": [
+            {
+                "brief": "Makes cold things hot",
+                "product": 19007559,
+                "images": [],
+                "skus": [],
+                "finalCost": 149.95,
+                "title": "Microwave",
+                "storeId": 19007516,
+                "content": "Heats things up really quick, but dont put anything metal in.",
+                "sortableTitle": "Microwave",
+                "tags": [
+                    "home"
+                ],
+                "variantCount": 2,
+                "path": "/flutter-example-ecomstore/home/19007559",
+                "categoryIds": [
+                    19007545
+                ],
+                "productCode": "p4",
+                "createdDate": "2020-03-16T07:08:04.752Z",
+                "primaryImageId": null,
+                "attributeNames": [],
+                "webName": null,
+                "name": "p4",
+                "position": null,
+                "productInStore": 19007566,
+                "productRrp": null,
+                "primaryImageHref": null
+            },
+            {
+                "brief": "Makes toast",
+                "product": 19007547,
+                "images": [],
+                "skus": [],
+                "finalCost": 49.95,
+                "title": "Toaster",
+                "storeId": 19007516,
+                "content": "Makes nice, warm toast",
+                "sortableTitle": "Toaster",
+                "tags": [
+                    "home"
+                ],
+                "variantCount": 2,
+                "path": "/flutter-example-ecomstore/home/19007547",
+                "categoryIds": [
+                    19007545
+                ],
+                "productCode": "p3",
+                "createdDate": "2020-03-16T07:08:04.538Z",
+                "primaryImageId": null,
+                "attributeNames": [],
+                "webName": null,
+                "name": "p3",
+                "position": null,
+                "productInStore": 19007554,
+                "productRrp": null,
+                "primaryImageHref": null
+            },
+            {
+                "brief": "Get the world's best Ipad",
+                "product": 19007521,
+                "images": [
+                    {
+                        "name": "ipadmini.jpeg",
+                        "href": "/_hashes/files/9b448c86040b2d63cd9e6e8efeeceecb6a94f0ac",
+                        "hash": "9b448c86040b2d63cd9e6e8efeeceecb6a94f0ac"
+                    }
+                ],
+                "skus": [
+                    {
+                        "skuTitle": "Ipad Mini - 16Gb",
+                        "params": [
+                            {
+                                "opts": [
+                                    {
+                                        "optName": "16Gb",
+                                        "optTitle": "16Gb"
+                                    }
+                                ],
+                                "paramTitle": "Memory",
+                                "paramName": "Memory"
+                            }
+                        ],
+                        "skuCode": "p1-Memory-16Gb"
+                    },
+                    {
+                        "skuTitle": "Ipad Mini - 32Gb",
+                        "params": [
+                            {
+                                "opts": [
+                                    {
+                                        "optName": "32Gb",
+                                        "optTitle": "32Gb"
+                                    }
+                                ],
+                                "paramTitle": "Memory",
+                                "paramName": "Memory"
+                            }
+                        ],
+                        "skuCode": "p1-Memory-32Gb"
+                    }
+                ],
+                "finalCost": 125,
+                "title": "Ipad Mini",
+                "storeId": 19007516,
+                "content": "Get the world's best Ipad",
+                "sortableTitle": "Ipad Mini",
+                "tags": [
+                    "elec"
+                ],
+                "variantCount": 2,
+                "path": "/flutter-example-ecomstore/elec/19007521",
+                "categoryIds": [
+                    19007519
+                ],
+                "productCode": "p1",
+                "createdDate": "2020-03-16T07:08:04.010Z",
+                "primaryImageId": 19007967,
+                "attributeNames": [
+                    "Memory"
+                ],
+                "webName": null,
+                "name": "p1",
+                "position": null,
+                "productInStore": 19007528,
+                "productRrp": null,
+                "primaryImageHref": "/_hashes/files/9b448c86040b2d63cd9e6e8efeeceecb6a94f0ac"
+            },
+            {
+                "brief": "Awesome laptop",
+                "product": 19007533,
+                "images": [],
+                "skus": [],
+                "finalCost": 2035,
+                "title": "Laptop",
+                "storeId": 19007516,
+                "content": "Very awesome laptop",
+                "sortableTitle": "Laptop",
+                "tags": [
+                    "elec"
+                ],
+                "variantCount": 2,
+                "path": "/flutter-example-ecomstore/elec/19007533",
+                "categoryIds": [
+                    19007519
+                ],
+                "productCode": "p2",
+                "createdDate": "2020-03-16T07:08:04.280Z",
+                "primaryImageId": null,
+                "attributeNames": [],
+                "webName": null,
+                "name": "p2",
+                "position": null,
+                "productInStore": 19007540,
+                "productRrp": null,
+                "primaryImageHref": null
+            }
+        ]
+    },
+    "fieldMessages": [],
+    "messages": [],
+    "nextHref": "",
+    "status": true
+}

@@ -1,0 +1,9 @@
+<controllers onAppEnabled="_onAppEnabled">
+    <!-- Common -->
+    <source>/APP-INF/common/config.js</source>
+    <source>/APP-INF/common/common.js</source>
+
+    <!-- Website -->
+    <source>/APP-INF/website/mappings.js</source>
+    <source>/APP-INF/website/api.js</source>
+</controllers> 

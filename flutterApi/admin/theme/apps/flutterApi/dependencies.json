@@ -1,0 +1,9 @@
+{
+    "appDependencies": [
+        {
+            "appId": "KCommerce2",
+            "branch": "3.6.8"
+        }
+    ],
+    "dependencies": []
+}
