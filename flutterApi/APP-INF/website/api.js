@@ -84,6 +84,40 @@
 
     g._getCategories = function (page) {
         var fc = formatter.newFormContext();
+
+        var storeName = fc.rawParam('storeName');
+        var storeObj = services.catalogManager.findStore(storeName);
+
+        var results = formatter.newArrayList();
+
+        var ecomApp = applications.get('KCommerce2');
+        var categories = ecomApp.call('getCategoriesInStore', storeObj, null);
+
+        if (formatter.isNotEmpty(categories)) {
+
+            categories.forEach(function (m) {
+                var cat = m.category;
+                if (!cat.hidden) {
+                    var catMap = formatter.newMap();
+
+                    catMap.put('id', cat.id);
+                    catMap.put('name', cat.name);
+                    catMap.put('title', cat.title);
+                    if (formatter.isNotNull(cat.mainImageHash)) {
+                        catMap.put('mainImageHash', '/_hashes/files/' + cat.mainImageHash);
+                    } else {
+                        catMap.put('mainImageHash', null);
+                    }
+
+                    results.add(catMap);
+                }
+            });
+        }
+
+        var jr = views.jsonResult(true);
+        jr.data = results;
+
+        return jr;
     };
 
     g._getPoints = function (page) {

@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import '../model/data.dart';
 import 'home_page.dart';
 import 'shopping_cart_page.dart';
 import '../themes/light_color.dart';
 import '../themes/theme.dart';
 import '../widgets/bottomNagivationBar/bottom_navigation_bar.dart';
-import '../widgets/product_icon.dart';
-import '../widgets/product_card.dart';
 import '../widgets/profile_icon.dart';
 import '../widgets/title_text.dart';
 

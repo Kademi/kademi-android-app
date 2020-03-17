@@ -1,0 +1,20 @@
+{
+    "data": [
+        {
+            "id": 19007519,
+            "name": "elec",
+            "title": "Electronics",
+            "mainImageHash": "/_hashes/files/f7885e68c5432f59013ec26da16023a95661144d.png"
+        },
+        {
+            "id": 19007545,
+            "name": "home",
+            "title": "Homeware",
+            "mainImageHash": null
+        }
+    ],
+    "fieldMessages": [],
+    "messages": [],
+    "nextHref": "",
+    "status": true
+}

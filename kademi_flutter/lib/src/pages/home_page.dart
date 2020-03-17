@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'package:google_fonts/google_fonts.dart';
 
+import '../model/category.dart';
+import '../widgets/category_select.dart';
 import '../model/data.dart';
 import '../model/product.dart';
 import '../themes/light_color.dart';
 import '../themes/theme.dart';
-import '../widgets/bottomNagivationBar/bottom_navigation_bar.dart';
-import '../widgets/product_icon.dart';
 import '../widgets/product_card.dart';
-import '../widgets/title_text.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -21,6 +18,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Category selectedCategory;
+
   Widget _icon(IconData icon, {Color color = LightColor.iconColor}) {
     return Container(
       padding: EdgeInsets.all(10),
@@ -35,21 +34,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _categoryWidget() {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      width: AppTheme.fullWidth(context),
-      height: 80,
-      child: ListView(
-          scrollDirection: Axis.horizontal,
-          children: AppData.categoryList
-              .map((category) => ProductIcon(
-                    model: category,
-                  ))
-              .toList()),
-    );
-  }
-
   Widget _productWidget() {
     return StreamBuilder(
       stream: AppData.productList.asStream(),
@@ -59,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
           return Container(
             margin: EdgeInsets.symmetric(vertical: 10),
             width: AppTheme.fullWidth(context),
-            height: AppTheme.fullHeight(context) * .55,
+            height: AppTheme.fullHeight(context) * .4,
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
@@ -68,9 +52,21 @@ class _MyHomePageState extends State<MyHomePage> {
                 crossAxisSpacing: 0,
               ),
               itemBuilder: (BuildContext context, int index) {
-                return ProductCard(
-                  product: products[index],
-                );
+                Product p = products[index];
+                if (this.selectedCategory != null) {
+                  if (p.categoryIds != null &&
+                      p.categoryIds.contains(this.selectedCategory.id)) {
+                    return ProductCard(
+                      product: p,
+                    );
+                  }else{
+                    return SizedBox();
+                  }
+                } else {
+                  return ProductCard(
+                    product: p,
+                  );
+                }
               },
               itemCount: products.length,
             ),
@@ -116,13 +112,21 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void categoryChanged(Category category) {
+    setState(() {
+      this.selectedCategory = category;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         _search(),
-        //_categoryWidget(),
+        CategorySelect(
+          onSelectedCategoryChanged: categoryChanged,
+        ),
         _productWidget(),
       ],
     );
