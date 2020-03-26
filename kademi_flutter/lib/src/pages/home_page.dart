@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
-import '../model/category.dart';
+import '../api/kademi_api.dart';
+import '../model/json_result/json_result.dart';
+import '../model/products/product_list.dart';
 import '../widgets/category_select.dart';
-import '../model/data.dart';
-import '../model/product.dart';
 import '../themes/light_color.dart';
 import '../themes/theme.dart';
 import '../widgets/product_card.dart';
+import '../model/products/product.dart';
+import '../model/categories/category.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -18,7 +20,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final TextEditingController _searchQuery = new TextEditingController();
   Category selectedCategory;
+  String productQuery;
 
   Widget _icon(IconData icon, {Color color = LightColor.iconColor}) {
     return Container(
@@ -34,17 +38,20 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _productWidget() {
+  Widget _productWidget(String q, String categoryName) {
     return StreamBuilder(
-      stream: AppData.productList.asStream(),
-      builder: (BuildContext context, AsyncSnapshot<List<Product>> snapshot) {
-        if (snapshot.hasData) {
-          List<Product> products = snapshot.data;
+      stream: KademiApi.searchProducts(q, categoryName).asStream(),
+      builder: (BuildContext context,
+          AsyncSnapshot<JsonResult<ProductList>> snapshot) {
+        if (snapshot.hasData && snapshot.data.status) {
+          List<Product> products = snapshot.data.data.products;
           return Container(
+            key: UniqueKey(),
             margin: EdgeInsets.symmetric(vertical: 10),
             width: AppTheme.fullWidth(context),
             height: AppTheme.fullHeight(context) * .4,
             child: GridView.builder(
+              shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 childAspectRatio: 4 / 6,
@@ -57,9 +64,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   if (p.categoryIds != null &&
                       p.categoryIds.contains(this.selectedCategory.id)) {
                     return ProductCard(
+                      key: Key('${p.product}'),
                       product: p,
                     );
-                  }else{
+                  } else {
                     return SizedBox();
                   }
                 } else {
@@ -95,6 +103,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: LightColor.lightGrey.withAlpha(100),
                   borderRadius: BorderRadius.all(Radius.circular(10))),
               child: TextField(
+                controller: _searchQuery,
+                onSubmitted: (s) {
+                  if (this.productQuery != _searchQuery.text) {
+                    setState(() {
+                      this.productQuery = _searchQuery.text;
+                    });
+                  }
+                },
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "Search Products",
@@ -105,8 +121,8 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          SizedBox(width: 20),
-          _icon(Icons.filter_list, color: Colors.black54),
+          // SizedBox(width: 20),
+          // _icon(Icons.filter_list, color: Colors.black54),
         ],
       ),
     );
@@ -127,7 +143,8 @@ class _MyHomePageState extends State<MyHomePage> {
         CategorySelect(
           onSelectedCategoryChanged: categoryChanged,
         ),
-        _productWidget(),
+        _productWidget(productQuery,
+            (selectedCategory != null ? selectedCategory.name : null)),
       ],
     );
   }

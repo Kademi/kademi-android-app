@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../config/kademi_settings.dart';
-import '../model/category.dart';
 import '../themes/light_color.dart';
 import '../themes/theme.dart';
 import '../widgets/title_text.dart';
+import '../model/categories/category.dart';
 
 typedef CategoryCallback = void Function(Category category);
 

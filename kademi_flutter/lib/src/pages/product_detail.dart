@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:kademi_app/src/model/sku_param.dart';
-import 'package:kademi_app/src/model/sku_param_opt.dart';
 
 import '../config/kademi_settings.dart';
-import '../model/product.dart';
 import '../themes/light_color.dart';
 import '../themes/theme.dart';
 import '../widgets/title_text.dart';
+import '../model/products/product.dart';
+import '../model/products/sku_param_opt.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final Product product;
@@ -182,7 +181,7 @@ class _ProductDetailPageState extends State<ProductDetailPage>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      TitleText(text: product.name, fontSize: 25),
+                      TitleText(text: product.title, fontSize: 25),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
@@ -190,29 +189,29 @@ class _ProductDetailPageState extends State<ProductDetailPage>
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               TitleText(
-                                text: "\$ ",
-                                fontSize: 18,
-                                color: LightColor.red,
-                              ),
-                              TitleText(
                                 text: product.finalCost.toString(),
                                 fontSize: 25,
                               ),
+                              TitleText(
+                                text: " Pts",
+                                fontSize: 18,
+                                color: LightColor.red,
+                              ),
                             ],
                           ),
-                          Row(
-                            children: <Widget>[
-                              Icon(Icons.star,
-                                  color: LightColor.yellowColor, size: 17),
-                              Icon(Icons.star,
-                                  color: LightColor.yellowColor, size: 17),
-                              Icon(Icons.star,
-                                  color: LightColor.yellowColor, size: 17),
-                              Icon(Icons.star,
-                                  color: LightColor.yellowColor, size: 17),
-                              Icon(Icons.star_border, size: 17),
-                            ],
-                          ),
+                          // Row(
+                          //   children: <Widget>[
+                          //     Icon(Icons.star,
+                          //         color: LightColor.yellowColor, size: 17),
+                          //     Icon(Icons.star,
+                          //         color: LightColor.yellowColor, size: 17),
+                          //     Icon(Icons.star,
+                          //         color: LightColor.yellowColor, size: 17),
+                          //     Icon(Icons.star,
+                          //         color: LightColor.yellowColor, size: 17),
+                          //     Icon(Icons.star_border, size: 17),
+                          //   ],
+                          //),
                         ],
                       ),
                     ],
@@ -312,10 +311,10 @@ class _ProductDetailPageState extends State<ProductDetailPage>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        TitleText(
-          text: product.title,
-          fontSize: 14,
-        ),
+        // TitleText(
+        //   text: product.title,
+        //   fontSize: 14,
+        // ),
         SizedBox(height: 20),
         Text(product.content),
       ],

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'home_page.dart';
+import 'profile_page.dart';
 import 'shopping_cart_page.dart';
 import '../themes/light_color.dart';
 import '../themes/theme.dart';
 import '../widgets/bottomNagivationBar/bottom_navigation_bar.dart';
 import '../widgets/profile_icon.dart';
 import '../widgets/title_text.dart';
+
+enum CURRENT_PAGE { HOME_PAGE, SHOPPING_CART, PROFILE_PAGE }
 
 class MainPage extends StatefulWidget {
   MainPage({Key key, this.title}) : super(key: key);
@@ -17,7 +20,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  bool isHomePageSelected = true;
+  CURRENT_PAGE _currentPage = CURRENT_PAGE.HOME_PAGE;
   Widget _appBar() {
     return Container(
       padding: AppTheme.padding,
@@ -58,19 +61,27 @@ class _MainPageState extends State<MainPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 TitleText(
-                  text: isHomePageSelected ? 'Our' : 'Shopping',
+                  text: (_currentPage == CURRENT_PAGE.SHOPPING_CART
+                      ? 'Shopping'
+                      : (_currentPage == CURRENT_PAGE.PROFILE_PAGE
+                          ? 'Your'
+                          : 'Our')),
                   fontSize: 27,
                   fontWeight: FontWeight.w400,
                 ),
                 TitleText(
-                  text: isHomePageSelected ? 'Products' : 'Cart',
+                  text: (_currentPage == CURRENT_PAGE.SHOPPING_CART
+                      ? 'Cart'
+                      : (_currentPage == CURRENT_PAGE.PROFILE_PAGE
+                          ? 'Details'
+                          : 'Products')),
                   fontSize: 27,
                   fontWeight: FontWeight.w700,
                 ),
               ],
             ),
             Spacer(),
-            !isHomePageSelected
+            _currentPage == CURRENT_PAGE.SHOPPING_CART
                 ? Icon(
                     Icons.delete_outline,
                     color: LightColor.orange,
@@ -81,13 +92,17 @@ class _MainPageState extends State<MainPage> {
   }
 
   void onBottomIconPressed(int index) {
-    if (index == 0 || index == 1) {
+    if (index == 0) {
       setState(() {
-        isHomePageSelected = true;
+        _currentPage = CURRENT_PAGE.HOME_PAGE;
       });
-    } else {
+    } else if (index == 1) {
       setState(() {
-        isHomePageSelected = false;
+        _currentPage = CURRENT_PAGE.SHOPPING_CART;
+      });
+    } else if (index == 2) {
+      setState(() {
+        _currentPage = CURRENT_PAGE.PROFILE_PAGE;
       });
     }
   }
@@ -103,30 +118,36 @@ class _MainPageState extends State<MainPage> {
               child: Container(
                 height: AppTheme.fullHeight(context) - 50,
                 decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                  colors: [
-                    Color(0xfffbfbfb),
-                    Color(0xfff7f7f7),
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                )),
+                  gradient: LinearGradient(
+                    colors: [
+                      Color(0xfffbfbfb),
+                      Color(0xfff7f7f7),
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    _appBar(),
+                    //_appBar(),
                     _title(),
                     Expanded(
                       child: AnimatedSwitcher(
                         duration: Duration(milliseconds: 300),
                         switchInCurve: Curves.easeInToLinear,
                         switchOutCurve: Curves.easeOutBack,
-                        child: isHomePageSelected
-                            ? MyHomePage()
-                            : Align(
+                        child: (_currentPage == CURRENT_PAGE.SHOPPING_CART
+                            ? Align(
                                 alignment: Alignment.topCenter,
                                 child: ShopingCartPage(),
-                              ),
+                              )
+                            : (_currentPage == CURRENT_PAGE.PROFILE_PAGE
+                                ? Align(
+                                    alignment: Alignment.topCenter,
+                                    child: ProfilePage(),
+                                  )
+                                : MyHomePage())),
                       ),
                     )
                   ],

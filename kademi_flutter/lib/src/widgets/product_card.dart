@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import '../config/kademi_settings.dart';
-import '../model/data.dart';
-import '../model/product.dart';
 import '../themes/light_color.dart';
-import '../themes/theme.dart';
 import '../widgets/title_text.dart';
+import '../model/products/product.dart';
 
 class ProductCard extends StatefulWidget {
   final Product product;

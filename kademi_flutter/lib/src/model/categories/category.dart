@@ -13,13 +13,4 @@ class Category {
     title = json['title'];
     mainImageHash = json['mainImageHash'];
   }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['title'] = this.title;
-    data['mainImageHash'] = this.mainImageHash;
-    return data;
-  }
 }

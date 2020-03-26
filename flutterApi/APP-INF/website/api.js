@@ -22,7 +22,7 @@
 
         // category is also used in the brand attribute, so match on either
         if (categoryObj !== null && !categoryObj.hidden) {
-            must.push({
+            q.query.bool.must.push({
                 bool: {
                     should: [
                         { term: { 'categoryIds': categoryObj.id } },
@@ -64,9 +64,7 @@
 
         var results = services.searchManager.search(JSON.stringify(q), 'ecommercestore');
 
-        var data = formatter.newMap();
         var products = formatter.newArrayList();
-        data.put('products', products);
 
         if (formatter.isNotNull(results)) {
             var hits = results.hits.hits;
@@ -77,7 +75,7 @@
         }
 
         var jr = views.jsonResult(true);
-        jr.data = data;
+        jr.data = products;
 
         return jr;
     };

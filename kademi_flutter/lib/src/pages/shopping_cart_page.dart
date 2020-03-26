@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '../model/data.dart';
-import '../model/product.dart';
+import 'package:kademi_app/src/model/products/product.dart';
 import '../themes/light_color.dart';
 import '../themes/theme.dart';
 import '../widgets/title_text.dart';
@@ -9,7 +8,8 @@ class ShopingCartPage extends StatelessWidget {
   const ShopingCartPage({Key key}) : super(key: key);
 
   Widget _cartItems() {
-    return Column(children: AppData.cartList.map((x) => _item(x)).toList());
+    // AppData.cartList.map((x) => _item(x)).toList()
+    return Column(children: []);
   }
 
   Widget _item(Product model) {
@@ -58,13 +58,13 @@ class ShopingCartPage extends StatelessWidget {
                   subtitle: Row(
                     children: <Widget>[
                       TitleText(
-                        text: '\$ ',
-                        color: LightColor.red,
-                        fontSize: 12,
-                      ),
-                      TitleText(
                         text: model.finalCost.toString(),
                         fontSize: 14,
+                      ),
+                      TitleText(
+                        text: ' Pts',
+                        color: LightColor.red,
+                        fontSize: 12,
                       ),
                     ],
                   ),
@@ -90,7 +90,7 @@ class ShopingCartPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         TitleText(
-          text: '${AppData.cartList.length} Items',
+          text: '0 Items',
           color: LightColor.grey,
           fontSize: 14,
           fontWeight: FontWeight.w500,
@@ -122,9 +122,9 @@ class ShopingCartPage extends StatelessWidget {
 
   double getPrice() {
     double price = 0;
-    AppData.cartList.forEach((x) {
-      price += x.finalCost;
-    });
+    // AppData.cartList.forEach((x) {
+    //   price += x.finalCost;
+    // });
     return price;
   }
 

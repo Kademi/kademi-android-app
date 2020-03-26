@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:kademi_app/src/api/kademi_api.dart';
 import '../widgets/category_card.dart';
 import '../themes/theme.dart';
-import '../model/category.dart';
-import '../model/data.dart';
+import '../model/categories/category.dart';
 
 class CategorySelect extends StatefulWidget {
   final CategoryCallback onSelectedCategoryChanged;
@@ -40,10 +40,18 @@ class _CategorySelectState extends State<CategorySelect> {
   @override
   void initState() {
     super.initState();
-    AppData.categoryList.then((value) {
-      setState(() {
-        categories = value;
-      });
+    // AppData.categoryList.then((value) {
+    //   setState(() {
+    //     categories = value;
+    //   });
+    // });
+
+    KademiApi.categories().then((jr) {
+      if (jr != null && jr.status) {
+        setState(() {
+          categories = jr.data.categories;
+        });
+      }
     });
   }
 
