@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:kademi_app/src/model/cart/cart_data.dart';
 import 'package:requests/requests.dart';
 
 import '../config/kademi_settings.dart';
@@ -81,12 +82,115 @@ class KademiApi {
           return ProductList.fromJson(json);
         });
       }
-    }).catchError((e) {
-      debugPrint('Error getting products $e');
     });
   }
 
-  static Future<JsonResult> addToCart() {}
+  static Future<JsonResult<CartData>> cart() {
+    String url =
+        '${KademiSettings.BASE_URL}/_flutterApi';
+    return Requests.get(
+      url,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      queryParameters: {
+        'cart': 'true',
+        'storeName': KademiSettings.STORE_NAME,
+        'pointsBucket': KademiSettings.POINTS_BUCKET,
+      },
+    ).then((resp) {
+      debugPrint('cart() - ${resp.hasError} - ${resp.statusCode}');
+      if (resp.hasError) {
+        return null;
+      } else {
+        Map<String, dynamic> body = resp.json();
 
-  static Future<JsonResult> cart() {}
+        return JsonResult<CartData>.fromJson(body, (json) {
+          return CartData.fromJson(json);
+        });
+      }
+    });
+  }
+
+  static Future<JsonResult> addToCart(String skuId) {
+    String url = '${KademiSettings.BASE_URL}/${KademiSettings.STORE_NAME}/cart';
+    return Requests.post(
+      url,
+      bodyEncoding: RequestBodyEncoding.FormURLEncoded,
+      body: {
+        'quantity': '1',
+        'skuId': skuId,
+      },
+    ).then((resp) {
+      if (resp.hasError) {
+        return null;
+      } else {
+        Map<String, dynamic> body = resp.json();
+
+        return JsonResult.fromJson(body, null);
+      }
+    });
+  }
+
+  static Future<JsonResult> updateCartItemQuantity(
+      String skuId, String newQuantity) {
+    String url = '${KademiSettings.BASE_URL}/${KademiSettings.STORE_NAME}/cart';
+    return Requests.post(
+      url,
+      bodyEncoding: RequestBodyEncoding.FormURLEncoded,
+      body: {
+        'newQuantity': newQuantity,
+        'skuId': skuId,
+      },
+    ).then((resp) {
+      if (resp.hasError) {
+        return null;
+      } else {
+        Map<String, dynamic> body = resp.json();
+
+        return JsonResult.fromJson(body, null);
+      }
+    });
+  }
+
+  static Future<JsonResult> removeCartItem(String lineId) {
+    String url = '${KademiSettings.BASE_URL}/${KademiSettings.STORE_NAME}/cart';
+    return Requests.post(
+      url,
+      bodyEncoding: RequestBodyEncoding.FormURLEncoded,
+      body: {
+        "removeLineId": lineId,
+      },
+    ).then((resp) {
+      if (resp.hasError) {
+        return null;
+      } else {
+        Map<String, dynamic> body = resp.json();
+
+        return JsonResult.fromJson(body, null);
+      }
+    });
+  }
+
+  static Future<JsonResult> clearCart() {
+    String url = '${KademiSettings.BASE_URL}/${KademiSettings.STORE_NAME}/cart';
+    return Requests.post(
+      url,
+      bodyEncoding: RequestBodyEncoding.FormURLEncoded,
+      body: {
+        "clearCartItems": "true",
+      },
+    ).then((resp) {
+      if (resp.hasError) {
+        return null;
+      } else {
+        Map<String, dynamic> body = resp.json();
+
+        debugPrint('clearCart - $body');
+
+        return JsonResult.fromJson(body, null);
+      }
+    });
+  }
 }

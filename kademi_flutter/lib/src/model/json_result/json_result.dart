@@ -18,7 +18,9 @@ class JsonResult<T extends DataInterface> {
       this.status});
 
   JsonResult.fromJson(Map<String, dynamic> json, DataCreator<T> dc) {
-    data = json['data'] != null ? dc(json['data']) : null;
+    if (dc != null) {
+      data = json['data'] != null ? dc(json['data']) : null;
+    }
     if (json['fieldMessages'] != null) {
       fieldMessages = new List<FieldMessages>();
       json['fieldMessages'].forEach((v) {

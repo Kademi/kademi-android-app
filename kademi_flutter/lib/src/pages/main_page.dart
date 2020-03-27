@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kademi_app/src/api/kademi_api.dart';
 import 'home_page.dart';
 import 'profile_page.dart';
 import 'shopping_cart_page.dart';
@@ -81,12 +82,6 @@ class _MainPageState extends State<MainPage> {
               ],
             ),
             Spacer(),
-            _currentPage == CURRENT_PAGE.SHOPPING_CART
-                ? Icon(
-                    Icons.delete_outline,
-                    color: LightColor.orange,
-                  )
-                : SizedBox()
           ],
         ));
   }

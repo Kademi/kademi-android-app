@@ -14,6 +14,7 @@ dependencies:
   carousel_slider: ^1.4.1
   requests: ^3.1.0
   provider: ^4.0.4
+  fluttertoast: ^4.0.1
   flutter:
     sdk: flutter
 

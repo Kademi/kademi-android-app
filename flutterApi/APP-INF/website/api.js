@@ -70,7 +70,23 @@
             var hits = results.hits.hits;
             for (var i = 0; i < hits.length; i++) {
                 var hit = hits[i];
-                products.add(hit.sourceAsMap);
+                var productSource = hit.sourceAsMap;
+
+                if (formatter.isNotEmpty(productSource.skus)) {
+                    for (var psi = 0; psi < productSource.skus.size(); psi++) {
+                        var skuMap = productSource.skus.get(psi);
+
+                        var sku = services.catalogManager.findSku(skuMap.skuCode);
+
+                        if (formatter.isNotNull(sku)) {
+                            skuMap.skuId = sku.id;
+                        }
+                    }
+
+                    log.info('Skus :: {}', productSource.skus);
+                }
+
+                products.add(productSource);
             }
         }
 
@@ -118,7 +134,81 @@
         return jr;
     };
 
-    g._getPoints = function (page) {
+    g._getCart = function (page) {
         var fc = formatter.newFormContext();
+        var data = formatter.newMap();
+
+        var storeName = fc.rawParam('storeName');
+        var storeObj = services.catalogManager.findStore(storeName);
+        var cart = services.cartManager.shoppingCart(false);
+
+        if (formatter.isNotNull(storeObj) && formatter.isNotNull(cart)) {
+            var checkoutItems = services.cartManager.checkoutItems(cart, storeObj);
+            var cartMap = formatter.newMap();
+
+            cartMap.numItems = checkoutItems.numItems;
+            cartMap.cartId = checkoutItems.cartId;
+            cartMap.totalCost = checkoutItems.totalCost;
+
+            var lineItems = formatter.newArrayList();
+            cartMap.lineItems = lineItems;
+
+            for (var i = 0; i < checkoutItems.items.size(); i++) {
+                var lineItem = checkoutItems.items.get(i);
+
+                var lineItemMap = formatter.newMap();
+                lineItemMap.itemId = lineItem.lineItemId;
+                lineItemMap.quantity = lineItem.quantity;
+                lineItemMap.unitCost = lineItem.unitCost;
+                lineItemMap.taxRate = lineItem.taxRate;
+                lineItemMap.tax = lineItem.tax;
+                lineItemMap.finalCost = lineItem.finalCost;
+                lineItemMap.itemDescription = lineItem.itemDescription;
+
+                if (formatter.isNotNull(lineItem.productSku)) {
+                    var productSku = formatter.newMap();
+                    productSku.id = lineItem.productSku.id;
+                    productSku.name = lineItem.productSku.name;
+                    productSku.title = lineItem.productSku.title;
+                    productSku.imageHash = lineItem.productSku.imageHash;
+
+                    lineItemMap.productSku = productSku;
+                }
+
+                if (formatter.isNotNull(lineItem.product)) {
+                    var product = formatter.newMap();
+
+                    var productImages = lineItem.product.images;
+                    if (formatter.isNotEmpty(productImages)) {
+                        var images = formatter.newArrayList();
+                        product.images = images;
+                        for (var ii = 0; ii < productImages.size(); ii++) {
+                            var image = productImages.get(ii);
+                            images.add(image);
+                        }
+                    }
+
+                    lineItemMap.product = product;
+                }
+
+                lineItems.add(lineItemMap);
+            }
+
+            data.put('cart', cartMap);
+        }
+
+        var pointsBucketName = fc.rawParam('pointsBucket');
+        var pointsBucket = services.pointsManager.findPointsBucket(pointsBucketName);
+
+        if (formatter.isNotNull(pointsBucket)) {
+            var curUser = securityManager.currentProfile;
+            var pointsBalance = services.pointsManager.availableBalance(curUser, pointsBucket);
+            data.put('pointsBalance', pointsBalance);
+        }
+
+        var jr = views.jsonResult(true);
+        jr.data = data;
+
+        return jr;
     };
 })(this);

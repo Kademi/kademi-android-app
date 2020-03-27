@@ -7,6 +7,17 @@ class SkuParam {
 
   SkuParam({this.opts, this.paramTitle, this.paramName});
 
+  bool containsOption(String optName) {
+    if (opts != null && opts.isNotEmpty) {
+      for (var opt in opts) {
+        if (opt.optName == optName) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   SkuParam.fromJson(Map<String, dynamic> json) {
     if (json['opts'] != null) {
       opts = new List<SkuParamOpts>();

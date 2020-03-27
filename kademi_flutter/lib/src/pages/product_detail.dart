@@ -1,5 +1,10 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:kademi_app/src/api/kademi_api.dart';
+import 'package:kademi_app/src/model/products/sku.dart';
+import 'package:kademi_app/src/widgets/variant_select.dart';
 
 import '../config/kademi_settings.dart';
 import '../themes/light_color.dart';
@@ -23,6 +28,9 @@ class ProductDetailPage extends StatefulWidget {
 class _ProductDetailPageState extends State<ProductDetailPage>
     with TickerProviderStateMixin {
   final Product product;
+
+  Map<String, String> _selectedVariants = new HashMap();
+  int _variantCount = 0;
 
   AnimationController controller;
   Animation<double> animation;
@@ -199,19 +207,6 @@ class _ProductDetailPageState extends State<ProductDetailPage>
                               ),
                             ],
                           ),
-                          // Row(
-                          //   children: <Widget>[
-                          //     Icon(Icons.star,
-                          //         color: LightColor.yellowColor, size: 17),
-                          //     Icon(Icons.star,
-                          //         color: LightColor.yellowColor, size: 17),
-                          //     Icon(Icons.star,
-                          //         color: LightColor.yellowColor, size: 17),
-                          //     Icon(Icons.star,
-                          //         color: LightColor.yellowColor, size: 17),
-                          //     Icon(Icons.star_border, size: 17),
-                          //   ],
-                          //),
                         ],
                       ),
                     ],
@@ -228,6 +223,7 @@ class _ProductDetailPageState extends State<ProductDetailPage>
   }
 
   Widget _availableVariants(Product product) {
+    _variantCount = 0;
     if (product.skus != null && product.skus.length > 0) {
       Map<String, String> skuParams = new Map();
       Map<String, List<SkuParamOpts>> variants = new Map();
@@ -250,10 +246,19 @@ class _ProductDetailPageState extends State<ProductDetailPage>
         var opts = variants[key];
 
         if (opts.length > 0) {
+          _variantCount++;
           widgets.add(SizedBox(
             height: 20,
           ));
-          widgets.add(_variant(key, value, opts));
+
+          widgets.add(VariantSelect(
+            key: Key('$key-$value'),
+            paramName: key,
+            paramTitle: value,
+            opts: opts,
+            onVariantSelect: _onVariantSelect,
+          ));
+          //widgets.add(_variant(key, value, opts));
         }
       });
 
@@ -262,49 +267,6 @@ class _ProductDetailPageState extends State<ProductDetailPage>
       }
     }
     return SizedBox.shrink();
-  }
-
-  Widget _variant(paramName, paramTitle, opts) {
-    List<Widget> widgets = [];
-
-    opts.forEach((o){
-      widgets.add(_sizeWidget(o.optTitle));
-    });
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        TitleText(
-          text: paramTitle,
-          fontSize: 14,
-        ),
-        SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: widgets,
-        )
-      ],
-    );
-  }
-
-  Widget _sizeWidget(String text,
-      {Color color = LightColor.iconColor, bool isSelected = false}) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        border: Border.all(
-            color: LightColor.iconColor,
-            style: !isSelected ? BorderStyle.solid : BorderStyle.none),
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-        color:
-            isSelected ? LightColor.orange : Theme.of(context).backgroundColor,
-      ),
-      child: TitleText(
-        text: text,
-        fontSize: 16,
-        color: isSelected ? LightColor.background : LightColor.titleTextColor,
-      ),
-    );
   }
 
   Widget _description(Product product) {
@@ -323,11 +285,43 @@ class _ProductDetailPageState extends State<ProductDetailPage>
 
   FloatingActionButton _floatingButton(Product product) {
     return FloatingActionButton(
-      onPressed: () {},
+      onPressed: () {
+        if (_variantCount == _selectedVariants.length) {
+          Sku sku = _findSku();
+          if (sku != null) {
+            debugPrint('Found SKU - ${sku.skuId}');
+            KademiApi.addToCart('${sku.skuId}').then((value) {
+              // Do Something
+            });
+          }else{
+            debugPrint('Found NOT FOUND - $_selectedVariants');
+          }
+        }
+      },
       backgroundColor: LightColor.orange,
       child: Icon(Icons.shopping_basket,
           color: Theme.of(context).floatingActionButtonTheme.backgroundColor),
     );
+  }
+
+  void _onVariantSelect(String paramName, String optName) {
+    setState(() {
+      if (optName == null || optName.length < 1) {
+        _selectedVariants.remove(paramName);
+      } else {
+        _selectedVariants[paramName] = optName;
+      }
+    });
+  }
+
+  Sku _findSku() {
+    for (var sku in product.skus) {
+      if (sku.matchesParam(_selectedVariants)) {
+        return sku;
+      }
+    }
+
+    return null;
   }
 
   @override

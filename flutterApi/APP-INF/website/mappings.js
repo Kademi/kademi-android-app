@@ -7,6 +7,6 @@
         .defaultView(views.jsonView(false, 'Unknown Method'))
         .addMethod('GET', '_getProducts', 'products')
         .addMethod('GET', '_getCategories', 'categories')
-        .addMethod('GET', '_getPoints', 'points')
+        .addMethod('GET', '_getCart', 'cart')
         .build();
 })(this);

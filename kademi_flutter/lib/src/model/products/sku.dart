@@ -4,8 +4,21 @@ class Sku {
   String skuTitle;
   List<SkuParam> params;
   String skuCode;
+  int skuId;
 
-  Sku({this.skuTitle, this.params, this.skuCode});
+  Sku({this.skuTitle, this.params, this.skuCode, this.skuId});
+
+  bool matchesParam(Map<String, String> selectedOpts) {
+    for (var skuParam in params) {
+      if (!selectedOpts.containsKey(skuParam.paramName)) {
+        return false;
+      } else if (!skuParam.containsOption(selectedOpts[skuParam.paramName])) {
+        return false;
+      }
+    }
+
+    return true;
+  }
 
   Sku.fromJson(Map<String, dynamic> json) {
     skuTitle = json['skuTitle'];
@@ -16,6 +29,7 @@ class Sku {
       });
     }
     skuCode = json['skuCode'];
+    skuId = json['skuId'];
   }
 
   Map<String, dynamic> toJson() {
