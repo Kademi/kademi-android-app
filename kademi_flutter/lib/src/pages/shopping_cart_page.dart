@@ -209,9 +209,19 @@ class _ShopingCartPageState extends State<ShopingCartPage> {
 
   Widget _submitButton(BuildContext context) {
     return FlatButton(
-      onPressed: () {},
+      onPressed: (_cartData != null &&
+              _cartData.cart != null &&
+              _cartData.cart.numItems > 0
+          ? () {
+              Navigator.of(context).pushNamed(
+                '/checkout',
+                arguments: _cartData,
+              );
+            }
+          : null),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       color: LightColor.orange,
+      disabledColor: LightColor.lightGrey,
       child: Container(
         alignment: Alignment.center,
         padding: EdgeInsets.symmetric(vertical: 12),

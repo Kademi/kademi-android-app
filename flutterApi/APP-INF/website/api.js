@@ -204,6 +204,10 @@
             var curUser = securityManager.currentProfile;
             var pointsBalance = services.pointsManager.availableBalance(curUser, pointsBucket);
             data.put('pointsBalance', pointsBalance);
+            if (formatter.isNotNull(cart)) {
+                var pointsParticipant = cart.pointsParticipant || curUser;
+                data.put('pointsBucketOptionId', pointsBucket.id + '-' + pointsParticipant.id);
+            }
         }
 
         var jr = views.jsonResult(true);

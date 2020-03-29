@@ -86,8 +86,7 @@ class KademiApi {
   }
 
   static Future<JsonResult<CartData>> cart() {
-    String url =
-        '${KademiSettings.BASE_URL}/_flutterApi';
+    String url = '${KademiSettings.BASE_URL}/_flutterApi';
     return Requests.get(
       url,
       headers: {
@@ -188,6 +187,26 @@ class KademiApi {
         Map<String, dynamic> body = resp.json();
 
         debugPrint('clearCart - $body');
+
+        return JsonResult.fromJson(body, null);
+      }
+    });
+  }
+
+  static Future<JsonResult> checkoutCart(Map<String, dynamic> params) {
+    String url = '${KademiSettings.BASE_URL}/${KademiSettings.STORE_NAME}/cart';
+
+    return Requests.post(
+      url,
+      bodyEncoding: RequestBodyEncoding.FormURLEncoded,
+      body: params,
+    ).then((resp) {
+      if (resp.hasError) {
+        return null;
+      } else {
+        Map<String, dynamic> body = resp.json();
+
+        debugPrint('checkoutCart - $body');
 
         return JsonResult.fromJson(body, null);
       }

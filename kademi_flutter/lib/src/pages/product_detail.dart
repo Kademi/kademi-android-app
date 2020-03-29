@@ -293,7 +293,7 @@ class _ProductDetailPageState extends State<ProductDetailPage>
             KademiApi.addToCart('${sku.skuId}').then((value) {
               // Do Something
             });
-          }else{
+          } else {
             debugPrint('Found NOT FOUND - $_selectedVariants');
           }
         }
@@ -331,14 +331,15 @@ class _ProductDetailPageState extends State<ProductDetailPage>
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(
-              gradient: LinearGradient(
-            colors: [
-              Color(0xfffbfbfb),
-              Color(0xfff7f7f7),
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          )),
+            gradient: LinearGradient(
+              colors: [
+                Color(0xfffbfbfb),
+                Color(0xfff7f7f7),
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
           child: Stack(
             children: <Widget>[
               Column(
