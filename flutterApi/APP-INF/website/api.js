@@ -184,7 +184,12 @@
                         product.images = images;
                         for (var ii = 0; ii < productImages.size(); ii++) {
                             var image = productImages.get(ii);
-                            images.add(image);
+                            images.add({
+                                id: image.id,
+                                name: image.name,
+                                hash: image.imageHash,
+                                ordinal: image.ordinal
+                            });
                         }
                     }
 
